@@ -18,23 +18,26 @@ def trova_tutti_i_valori(data):
     #print("\n\n")
 
     # Itero su 'semanticSegments' e verifica la presenza di 'timelinePath'
-    i = 0
-    for segment in data["semanticSegments"]:
-        #start_time = segment["startTime"]
-        if "visit" in segment:
-            lat, lon = data["semanticSegments"][i]["visit"]["topCandidate"]["placeLocation"]["latLng"].replace('Â°', '').split(", ")
-            risultati.append([segment["startTime"],float(lat), float(lon)]) 
-        elif "timelinePath" in segment:  # Controlla se 'timelinePath' è presente
-                #print("vero")
-                for entry in segment["timelinePath"]:
-                    #print("valori trovati nel file:", entry)
-                    lat, lon = entry["point"].replace('Â°', '').split(", ")
-                    risultati.append([entry["time"],float(lat), float(lon)]) 
-            #valori.append(segment)      
-        i = i + 1
-                
-    #print("\n\n")
-    #print("stampo risultati: ", risultati)
+    if "semanticSegments" in data:
+        i = 0
+        for segment in data["semanticSegments"]:
+            #start_time = segment["startTime"]
+            if "visit" in segment:
+                lat, lon = data["semanticSegments"][i]["visit"]["topCandidate"]["placeLocation"]["latLng"].replace('Â°', '').split(", ")
+                risultati.append([segment["startTime"],float(lat), float(lon)]) 
+            elif "timelinePath" in segment:  # Controlla se 'timelinePath' è presente
+                    #print("vero")
+                    for entry in segment["timelinePath"]:
+                        #print("valori trovati nel file:", entry)
+                        lat, lon = entry["point"].replace('Â°', '').split(", ")
+                        risultati.append([entry["time"],float(lat), float(lon)]) 
+                #valori.append(segment)      
+            i = i + 1
+        return 1            # Ritorno 1 se è stato letto un file JSON con formato corretto
+            
+    else:
+        messagebox.showerror("Errore apertura del file", "Il file aperto non possiede un formato corretto")
+        return 0    # Ritorno 1 se è stato letto un file JSON con formato non corretto
 
 # Carica il file JSON
 def apri_file():
@@ -49,51 +52,54 @@ def apri_file():
         title="Seleziona un file JSON",
         filetypes=[("File JSON", "*.json")]
     )
+
+    #print("\npercorso del file: "+ file_path+ "\n")
+
     if file_path:  # Se un file è stato selezionato
-        # Apro e leggo il file JSON
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r') as file:          # Apro e leggo il file JSON
             try:
                 data = json.load(file)
-                print("file aperto\n\n")
+                #print("file aperto\n\n")
                 #label.configure(text=f"File selezionato dal percorso: {file_path}")  # Aggiorna l'etichetta
+
+                if trova_tutti_i_valori(data) == 1:     # Se è stato aperto un file sintatticamente corretto allora procedo
+                    date.clear()
+                    valore_precedente = ""  # Definisco il valore precedente come una stringa vuota
+                    for i, valore in enumerate(risultati):
+                        #print("iterazione: ",i, "valore precedente: ", valore_precedente)
+                        if valore[0].split('T')[0] != valore_precedente:    # Estraggo solo la data dal primo elemento (timestamp) di ogni tupla di risultati 
+                            date.append(valore[0].split('T')[0])            # Inserisco valore nella lista date solo se il valore attuale è diverso dal precedente
+                        valore_precedente = valore [0].split('T')[0]        # Assegno al valore precedente il valore attuale 
+
+                    # Nascondo la label
+                    label.pack_forget()
+
+                    label2 = ttk.Label(app, text="Seleziona una data per visualizzarne gli spostamenti")
+                    label2.pack(pady=20)  # Aggiungi padding verticale per centrare meglio la label
+
+                    # Creazione del ComboBox con scrollbar
+                    combobox = ttk.Combobox(app, values=date)
+                    combobox.set(date[0])  # Imposto nella ComboBox il valore iniziale
+
+                    # Aggiungo il ComboBox alla finestra con un layout manager
+                    combobox.pack(pady=10, padx=20)
+
+                    # Aggiungo un pulsante per selezionare il file
+                    pulsante_ApriMappa = ttk.Button(app, text="Apri mappa", state="normal", command=apri_mappa)
+                    pulsante_ApriMappa.pack(pady=20)
+                    
+                    
+                    file_menu.entryconfig("Apri", state="disabled")         # Una volta che il file è aperto disabilito l'opzione di apertare di un file
+                    file_menu.add_separator()                               # Aggiungo una linea di separazione
+                    file_menu.add_command(label="Chiudi", command=chiudi)   # Aggiungo una voce per chiudere il file attualmente aperto    
+
+
             except json.JSONDecodeError:
-                print("Errore nella lettura del file JSON.")
-    #print("la var data è: ", data)
-    trova_tutti_i_valori(data)
-
-    #print("la lista risultati è: ", risultati)
-    date.clear()
-    valore_precedente = ""  # Definisco il valore precedente come una stringa vuota
-    for i, valore in enumerate(risultati):
-        #print("iterazione: ",i, "valore precedente: ", valore_precedente)
-        if valore[0].split('T')[0] != valore_precedente:    # Estraggo solo la data dal primo elemento (timestamp) di ogni tupla di risultati 
-            date.append(valore[0].split('T')[0])            # Inserisco valore nella lista date solo se il valore attuale è diverso dal precedente
-        valore_precedente = valore [0].split('T')[0]        # Assegno al valore precedente il valore attuale 
-
-    # Nascondo la label
-    label.pack_forget()
-
-    label2 = ttk.Label(app, text="Seleziona una data per visualizzarne gli spostamenti")
-    label2.pack(pady=20)  # Aggiungi padding verticale per centrare meglio la label
-
-    # Creazione del ComboBox con scrollbar
-    combobox = ttk.Combobox(app, values=date)
-    combobox.set(date[0])  # Imposto nella ComboBox il valore iniziale
-
-    # Aggiungo il ComboBox alla finestra con un layout manager
-    combobox.pack(pady=10, padx=20)
-
-    # Aggiungo un pulsante per selezionare il file
-    pulsante_ApriMappa = ttk.Button(app, text="Apri mappa", state="normal", command=apri_mappa)
-    pulsante_ApriMappa.pack(pady=20)
-    
-    
-    file_menu.entryconfig("Apri", state="disabled")         # Una volta che il file è aperto disabilito l'opzione di apertare di un file
-    file_menu.add_separator()                               # Aggiungo una linea di separazione
-    file_menu.add_command(label="Chiudi", command=chiudi)   # Aggiungo una voce per chiudere il file attualmente aperto    
-
+                #print("Errore nella lettura del file JSON.")
+                messagebox.showerror("Errore apertura del file", "Il file aperto non possiede un formato corretto")
 
     
+     
 
 # Funzione per avviare la finestra di pywebview
 def apri_mappa():
