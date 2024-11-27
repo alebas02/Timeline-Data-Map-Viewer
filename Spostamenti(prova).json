@@ -1,0 +1,95 @@
+{
+  "semanticSegments": [
+    {
+      "startTime": "2024-10-01T08:00:00.000+02:00",
+      "endTime": "2024-10-01T09:00:00.000+02:00",
+      "startTimeTimezoneUtcOffsetMinutes": 120,
+      "endTimeTimezoneUtcOffsetMinutes": 120,
+      "visit": {
+        "hierarchyLevel": 1,
+        "probability": 0.7,
+        "topCandidate": {
+          "placeId": "ChIJH1djw58nOBMRz4EMei6zdoX",
+          "semanticType": "LANDMARK",
+          "probability": 0.85,
+          "placeLocation": {
+            "latLng": "41.902782, 12.496366"
+          }
+        },
+        "isTimelessVisit": false
+      }
+    },
+    {
+      "startTime": "2024-10-01T12:00:00.000+02:00",
+      "endTime": "2024-10-01T14:00:00.000+02:00",
+      "timelinePath": [
+        {
+          "point": "41.893320, 12.482932",
+          "time": "2024-10-01T12:15:00.000+02:00"
+        },
+        {
+          "point": "41.890251, 12.492373",
+          "time": "2024-10-01T12:45:00.000+02:00"
+        },
+        {
+          "point": "41.898056, 12.513333",
+          "time": "2024-10-01T13:15:00.000+02:00"
+        },
+        {
+          "point": "41.912438, 12.495740",
+          "time": "2024-10-01T13:45:00.000+02:00"
+        },
+        {
+          "point": "41.907347, 12.476836",
+          "time": "2024-10-01T13:59:00.000+02:00"
+        }
+      ]
+    }, 
+	
+  {
+      "startTime": "2024-11-15T10:30:00.000+01:00",
+      "endTime": "2024-11-15T11:30:00.000+01:00",
+      "startTimeTimezoneUtcOffsetMinutes": 60,
+      "endTimeTimezoneUtcOffsetMinutes": 60,
+      "visit": {
+        "hierarchyLevel": 2,
+        "probability": 0.9,
+        "topCandidate": {
+          "placeId": "ChIJxXIHZJ8pEmsRsGU7VeJ3qzA",
+          "semanticType": "RESTAURANT",
+          "probability": 0.95,
+          "placeLocation": {
+            "latLng": "48.856614, 2.3522219"
+          }
+        },
+        "isTimelessVisit": false
+      }
+    },
+    {
+      "startTime": "2024-11-15T15:00:00.000+01:00",
+      "endTime": "2024-11-15T16:30:00.000+01:00",
+      "timelinePath": [
+        {
+          "point": "48.860611, 2.337644",
+          "time": "2024-11-15T15:10:00.000+01:00"
+        },
+        {
+          "point": "48.853444, 2.348800",
+          "time": "2024-11-15T15:45:00.000+01:00"
+        },
+        {
+          "point": "48.861111, 2.335833",
+          "time": "2024-11-15T16:05:00.000+01:00"
+        },
+        {
+          "point": "48.867550, 2.331920",
+          "time": "2024-11-15T16:20:00.000+01:00"
+        },
+        {
+          "point": "48.870480, 2.336690",
+          "time": "2024-11-15T16:28:00.000+01:00"
+        }
+      ]
+    }
+  ]
+}
