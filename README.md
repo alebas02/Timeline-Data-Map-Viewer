@@ -8,3 +8,5 @@ Successivamente aprire il proprio terminale e installare i seguenti pacchetti tr
 •	pip install pywebview
 
 Adesso è possibile aprire lo script python e runnarlo.
+
+Per generare il vostro file personale su dispositivo Android andare su Impostazioni > Posizione > Servizi per la Posizione > Spostamenti > Selezionate account Google a cui è connessa la Timeline > Esporta dati Spostamenti
