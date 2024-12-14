@@ -14,24 +14,22 @@ def trova_tutti_i_valori(data):
     global risultati 
     risultati.clear()  # Svuoto la lista prima di caricarla
     
-    #print("\nstampo risultati alla chiamata di trova_tutti...: ", risultati)
-    #print("\n\n")
-
     # Itero su 'semanticSegments' e verifica la presenza di 'timelinePath'
     if "semanticSegments" in data:
         i = 0
         for segment in data["semanticSegments"]:
-            #start_time = segment["startTime"]
             if "visit" in segment:
                 lat, lon = data["semanticSegments"][i]["visit"]["topCandidate"]["placeLocation"]["latLng"].replace('Â°', '').split(", ")
                 risultati.append([segment["startTime"],float(lat), float(lon)]) 
             elif "timelinePath" in segment:  # Controlla se 'timelinePath' è presente
-                    #print("vero")
                     for entry in segment["timelinePath"]:
-                        #print("valori trovati nel file:", entry)
                         lat, lon = entry["point"].replace('Â°', '').split(", ")
                         risultati.append([entry["time"],float(lat), float(lon)]) 
-                #valori.append(segment)      
+            elif "activity" in segment:
+                lat, lon = data["semanticSegments"][i]["activity"]["start"]["latLng"].replace('Â°', '').split(", ")
+                risultati.append([segment["startTime"],float(lat), float(lon)])
+                lat, lon = data["semanticSegments"][i]["activity"]["end"]["latLng"].replace('Â°', '').split(", ")
+                risultati.append([segment["endTime"],float(lat), float(lon)])    
             i = i + 1
         return 1            # Ritorno 1 se è stato letto un file JSON con formato corretto
             
@@ -41,7 +39,6 @@ def trova_tutti_i_valori(data):
 
 # Carica il file JSON
 def apri_file():
-    #print("Ciao")
     global combobox
     global risultati
     global pulsante_ApriMappa
@@ -53,20 +50,14 @@ def apri_file():
         filetypes=[("File JSON", "*.json")]
     )
 
-    #print("\npercorso del file: "+ file_path+ "\n")
-
     if file_path:  # Se un file è stato selezionato
         with open(file_path, 'r') as file:          # Apro e leggo il file JSON
             try:
                 data = json.load(file)
-                #print("file aperto\n\n")
-                #label.configure(text=f"File selezionato dal percorso: {file_path}")  # Aggiorna l'etichetta
-
                 if trova_tutti_i_valori(data) == 1:     # Se è stato aperto un file sintatticamente corretto allora procedo
                     date.clear()
                     valore_precedente = ""  # Definisco il valore precedente come una stringa vuota
                     for i, valore in enumerate(risultati):
-                        #print("iterazione: ",i, "valore precedente: ", valore_precedente)
                         if valore[0].split('T')[0] != valore_precedente:    # Estraggo solo la data dal primo elemento (timestamp) di ogni tupla di risultati 
                             date.append(valore[0].split('T')[0])            # Inserisco valore nella lista date solo se il valore attuale è diverso dal precedente
                         valore_precedente = valore [0].split('T')[0]        # Assegno al valore precedente il valore attuale 
@@ -95,7 +86,6 @@ def apri_file():
 
 
             except json.JSONDecodeError:
-                #print("Errore nella lettura del file JSON.")
                 messagebox.showerror("Errore apertura del file", "Il file aperto non possiede un formato corretto")
 
     
@@ -110,10 +100,7 @@ def apri_mappa():
     lista_timestamp_filtrata = []                           # Lista che conterrà solo i timestamp che equivalgono alla data selezionata dall'utente nella ComboBox  
     lista_coordinate_filtrata = []                          # Lista che conterrà solo le coordinae che appartengono alla data selezionata dall'utente nella ComboBox  
     
-    #print("la lista delle coordinate è:", lista_coordinate)
-    #print("la lista dei timestamp è: " , lista_timestamp)
     opzione_combobox = combobox.get()  # Salvo il valore selezionato dall'utente sulla ComboBox
-    #print(f"Opzione selezionata: {opzione_combobox}")
 
     # Carico le liste filtrare 
     i = 0
@@ -123,12 +110,7 @@ def apri_mappa():
             lista_coordinate_filtrata.append([risultati[i][1],risultati[i][2]])
         i = i+1
     
-    #print("la lista delle coordinate filtrata è:", lista_coordinate_filtrata)
-    #print("la lista dei timestamp filtrata è: " , lista_timestamp_filtrata)
-
     data_string = lista_timestamp_filtrata[0]      # Assegno il primo timestamp presente nella lista dei timestamp 
-
-    #print("data del primo timestamp", data_string)
 
     # Crea la mappa centrata su una posizione specifica
     mappa = folium.Map(location= lista_coordinate_filtrata[0], zoom_start=25) # Creo la mappa con zoom sulla prima coordinate individuata
