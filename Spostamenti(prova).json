@@ -44,9 +44,28 @@
           "time": "2024-10-01T13:59:00.000+02:00"
         }
       ]
-    }, 
-	
-  {
+    },
+	{
+      "startTime": "2024-10-01T16:22:41.000+02:00",
+      "endTime": "2024-10-01T16:42:59.000+02:00",
+      "startTimeTimezoneUtcOffsetMinutes": 120,
+      "endTimeTimezoneUtcOffsetMinutes": 120,
+      "activity": {
+        "start": {
+          "latLng": "41.902817, 12.475130"
+        },
+        "end": {
+          "latLng": "41.900512, 12.473904"
+        },
+        "distanceMeters": 15645.79296875,
+        "probability": 0.9984895586967468,
+        "topCandidate": {
+          "type": "IN_PASSENGER_VEHICLE",
+          "probability": 0.0
+        }
+      }
+    },
+	{
       "startTime": "2024-11-15T10:30:00.000+01:00",
       "endTime": "2024-11-15T11:30:00.000+01:00",
       "startTimeTimezoneUtcOffsetMinutes": 60,
@@ -91,5 +110,7 @@
         }
       ]
     }
+  ],
+  "rawSignals": [
   ]
 }
